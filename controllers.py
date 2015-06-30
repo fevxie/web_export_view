@@ -18,32 +18,29 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-try:
-    import json
-except ImportError:
-    import simplejson as json
-
-import web.http as openerpweb
-
-from web.controllers.main import ExcelExport
+import simplejson as json
+from openerp import http
+from openerp.http import request
+from openerp.addons.web.controllers.main import (
+    ExcelExport, serialize_exception)
 
 
 class ExcelExportView(ExcelExport):
-    _cp_path = '/web/export/xls_view'
 
     def __getattribute__(self, name):
         if name == 'fmt':
             raise AttributeError()
         return super(ExcelExportView, self).__getattribute__(name)
 
-    @openerpweb.httprequest
-    def index(self, req, data, token):
+    @http.route('/web/export/xls_view', type='http', auth="user")
+    @serialize_exception
+    def index(self, data, token):
         data = json.loads(data)
         model = data.get('model', [])
         columns_headers = data.get('headers', [])
         rows = data.get('rows', [])
 
-        return req.make_response(
+        return request.make_response(
             self.from_data(columns_headers, rows),
             headers=[
                 ('Content-Disposition', 'attachment; filename="%s"'

@@ -51,9 +51,8 @@ the same data of the tree view you are looking at, headers included.
     # 'external_dependencies': {
     #     'python': ['xlwt'],
     # },
-    'css':['static/css/style.css'],
-    'js': ['static/*/*.js', 'static/*/js/*.js'],
-    'qweb': ['static/xml/web_advanced_export.xml'],
+    'data': ['views/assert.xml'],
+    'qweb': ['static/src/xml/web_advanced_export.xml'],
     'installable': True,
     'auto_install': False,
     'web_preload': False,

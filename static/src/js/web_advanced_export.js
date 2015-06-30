@@ -72,12 +72,12 @@ openerp.web_export_view = function(instance, m) {
                             }
                         }
                         view = child.viewmanager.views.list.controller;
-                         isHasView = true;
+                        isHasView = true;
                         return false; // break out of the loop
                     }
                     if (child.field && child.field.type == 'many2many') {
 
-                         if(child.$el.css('display') == 'none'){
+                        if(child.$el.css('display') == 'none'){
                             return true;
                         }else{
                             var isHide = false;
@@ -153,7 +153,9 @@ openerp.web_export_view = function(instance, m) {
                     };
                 }
             });
-            $.blockUI();
+
+            var c = instance.webclient.crashmanager;
+            instance.web.blockUI();
             view.session.get_file({
                 url: '/web/export/xls_view',
                 data: {data: JSON.stringify({
@@ -161,10 +163,9 @@ openerp.web_export_view = function(instance, m) {
                     headers : export_columns_names,
                     rows : export_rows
                 })},
-                complete: $.unblockUI
+                complete: instance.web.unblockUI,
+                error: c.rpc_error.bind(c),
             });
         }
-
     });
-
 };
